@@ -5,7 +5,6 @@ export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: 'black',
         tabBarShowLabel: false,
       }}
     >
@@ -32,7 +31,7 @@ export default function TabsLayout() {
         options={{
           title: 'Notifications',
           tabBarIcon: ({ size, color }) => (
-            <Feather name='heart' size={size} color={color} />
+            <Feather name='bell' size={size} color={color} />
           ),
         }}
       />
