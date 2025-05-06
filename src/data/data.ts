@@ -1,4 +1,4 @@
-import { User, Post } from '@/types/types'
+import { User, Post } from '../types/types'
 
 export const users: User[] = [
   {
@@ -198,7 +198,7 @@ export const posts: Post[] = [
   },
 ]
 
-// Helper function to populate the replies arrays
+// // Helper function to populate the replies arrays
 // export function populateReplies() {
 //   posts.forEach((post) => {
 //     if (post.parent_id) {
