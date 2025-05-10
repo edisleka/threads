@@ -5,26 +5,37 @@ import {
   TouchableOpacity,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from 'react-native'
 import { Link } from 'expo-router'
 import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
 
 export default function SignupScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const handleSignup = async () => {
+    if (!email || !password) {
+      Alert.alert('Please enter email and password')
+      return
+    }
+
     try {
       setIsLoading(true)
-      setError('')
-      // TODO: Implement signup logic
-      console.log('Signup pressed', { email, password })
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+      const {
+        data: { session },
+        error,
+      } = await supabase.auth.signUp({
+        email,
+        password,
+      })
+      if (error) Alert.alert(error.message)
+      if (!session)
+        Alert.alert('Please check your inbox for email verification!')
     } catch (err) {
-      setError('Failed to signup. Please try again.')
+      console.log(err)
     } finally {
       setIsLoading(false)
     }
@@ -39,10 +50,6 @@ export default function SignupScreen() {
           </Text>
           <Text className='text-gray-500 text-lg'>Sign up to your account</Text>
         </View>
-
-        {error ? (
-          <Text className='text-red-500 text-center'>{error}</Text>
-        ) : null}
 
         <View className='space-y-6'>
           <View className='space-y-3'>
@@ -67,7 +74,7 @@ export default function SignupScreen() {
               placeholder='Enter your password'
               value={password}
               onChangeText={setPassword}
-              secureTextEntry
+              // secureTextEntry
               editable={!isLoading}
             />
           </View>

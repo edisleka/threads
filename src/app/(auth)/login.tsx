@@ -5,26 +5,33 @@ import {
   TouchableOpacity,
   Pressable,
   ActivityIndicator,
+  Alert,
 } from 'react-native'
 import { Link } from 'expo-router'
 import { useState } from 'react'
-
+import { supabase } from '@/lib/supabase'
 export default function LoginScreen() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
 
   const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert('Please enter email and password')
+      return
+    }
+
     try {
       setIsLoading(true)
-      setError('')
-      // TODO: Implement login logic
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      if (error) Alert.alert(error.message)
       console.log('Login pressed', { email, password })
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000))
     } catch (err) {
-      setError('Failed to login. Please try again.')
+      console.log(err)
+      Alert.alert('Failed to login. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -37,10 +44,6 @@ export default function LoginScreen() {
           <Text className='text-4xl font-bold text-gray-900'>Welcome back</Text>
           <Text className='text-gray-500 text-lg'>Sign in to your account</Text>
         </View>
-
-        {error ? (
-          <Text className='text-red-500 text-center'>{error}</Text>
-        ) : null}
 
         <View className='space-y-6'>
           <View className='space-y-3'>
