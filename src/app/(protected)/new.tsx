@@ -8,9 +8,27 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
+import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/providers/AuthProvider'
 
 export default function NewPost() {
   const [text, setText] = useState('')
+  const { user } = useAuth()
+
+  const onSubmit = async () => {
+    if (!text || !user) return
+
+    const { data, error } = await supabase.from('posts').insert({
+      content: text,
+      user_id: user.id,
+    })
+
+    if (error) {
+      console.log(error)
+    }
+
+    setText('')
+  }
 
   return (
     <SafeAreaView edges={['bottom']} className='p-4 flex-1'>
@@ -32,7 +50,7 @@ export default function NewPost() {
         />
 
         <View className='mt-auto'>
-          <Pressable onPress={() => console.log('post: ', text)}>
+          <Pressable onPress={onSubmit}>
             <Text className=' p-3 px-6 self-end rounded-full bg-black text-white'>
               Post
             </Text>

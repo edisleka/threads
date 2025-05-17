@@ -12,7 +12,7 @@ export default function PostListItem({ post }: { post: Post }) {
     <Pressable className='flex-row p-4 border-b border-gray-200'>
       {/* User Avatar */}
       <Image
-        source={{ uri: post.user.image }}
+        source={{ uri: post.user.avatar_url }}
         className='w-12 h-12 rounded-full'
       />
 
@@ -22,7 +22,7 @@ export default function PostListItem({ post }: { post: Post }) {
         <View className='flex-row items-center gap-2'>
           <Text className='font-bold text-gray-900'>{post.user.username}</Text>
           <Text className='text-gray-500 text-sm'>
-            {dayjs(post.createdAt).fromNow()}
+            {dayjs(post.created_at).fromNow()}
           </Text>
         </View>
 
@@ -37,7 +37,7 @@ export default function PostListItem({ post }: { post: Post }) {
           </Pressable>
           <Pressable className='flex-row items-center'>
             <Ionicons name='chatbubble-outline' size={20} color='gray' />
-            <Text className='ml-0.5 text-gray-500'>{post.replies.length}</Text>
+            <Text className='ml-0.5 text-gray-500'>{0}</Text>
           </Pressable>
 
           <Pressable className='flex-row items-center'>
