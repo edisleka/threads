@@ -1,5 +1,11 @@
 import { Tabs } from 'expo-router'
 import { Feather } from '@expo/vector-icons'
+import { router } from 'expo-router'
+
+type TabBarIconProps = {
+  size: number
+  color: string
+}
 
 export default function TabsLayout() {
   return (
@@ -12,7 +18,7 @@ export default function TabsLayout() {
         name='index'
         options={{
           title: 'Home',
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color }: TabBarIconProps) => (
             <Feather name='home' size={size} color={color} />
           ),
         }}
@@ -21,16 +27,31 @@ export default function TabsLayout() {
         name='search'
         options={{
           title: 'Search',
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color }: TabBarIconProps) => (
             <Feather name='search' size={size} color={color} />
           ),
+        }}
+      />
+      <Tabs.Screen
+        name='plus'
+        options={{
+          title: 'Plus',
+          tabBarIcon: ({ size, color }: TabBarIconProps) => (
+            <Feather name='plus' size={size} color={color} />
+          ),
+        }}
+        listeners={{
+          tabPress: (e: any) => {
+            e.preventDefault()
+            router.push('/new')
+          },
         }}
       />
       <Tabs.Screen
         name='notifications'
         options={{
           title: 'Notifications',
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color }: TabBarIconProps) => (
             <Feather name='bell' size={size} color={color} />
           ),
         }}
@@ -39,7 +60,7 @@ export default function TabsLayout() {
         name='profile'
         options={{
           title: 'Profile',
-          tabBarIcon: ({ size, color }) => (
+          tabBarIcon: ({ size, color }: TabBarIconProps) => (
             <Feather name='user' size={size} color={color} />
           ),
         }}

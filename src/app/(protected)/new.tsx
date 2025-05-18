@@ -36,7 +36,7 @@ export default function NewPost() {
     mutationFn: () => createPost(text, user!.id),
     onSuccess: () => {
       setText('')
-      router.back()
+      router.replace('/')
       queryClient.invalidateQueries({ queryKey: ['posts'] })
     },
     onError: (error) => {

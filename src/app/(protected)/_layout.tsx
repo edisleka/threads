@@ -14,7 +14,7 @@ export default function ProtectedLayout() {
         name='new'
         options={{
           presentation: 'modal',
-          animation: 'slide_from_bottom',
+          // animation: 'slide_from_bottom',
           title: 'New Thread',
         }}
       />
