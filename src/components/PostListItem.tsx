@@ -22,7 +22,7 @@ export default function PostListItem({ post }: { post: Post }) {
         <View className='flex-row items-center gap-2'>
           <Text className='font-bold text-gray-900'>{post.user.username}</Text>
           <Text className='text-gray-500 text-sm'>
-            {dayjs(post.created).fromNow()}
+            {dayjs(post.created_at).fromNow()}
           </Text>
         </View>
 
