@@ -10,25 +10,39 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/providers/AuthProvider'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { router } from 'expo-router'
+
+const createPost = async (content: string, user_id: string) => {
+  const { data } = await supabase
+    .from('posts')
+    .insert({
+      content,
+      user_id,
+    })
+    .select('*')
+    .throwOnError()
+
+  return data
+}
 
 export default function NewPost() {
   const [text, setText] = useState('')
   const { user } = useAuth()
 
-  const onSubmit = async () => {
-    if (!text || !user) return
+  const queryClient = useQueryClient()
 
-    const { data, error } = await supabase.from('posts').insert({
-      content: text,
-      user_id: user.id,
-    })
-
-    if (error) {
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: () => createPost(text, user!.id),
+    onSuccess: () => {
+      setText('')
+      router.back()
+      queryClient.invalidateQueries({ queryKey: ['posts'] })
+    },
+    onError: (error) => {
       console.log(error)
-    }
-
-    setText('')
-  }
+    },
+  })
 
   return (
     <SafeAreaView edges={['bottom']} className='p-4 flex-1'>
@@ -49,8 +63,10 @@ export default function NewPost() {
           numberOfLines={4}
         />
 
+        {error && <Text className='text-red-500'>{error.message}</Text>}
+
         <View className='mt-auto'>
-          <Pressable onPress={onSubmit}>
+          <Pressable onPress={() => mutate()} disabled={isPending}>
             <Text className=' p-3 px-6 self-end rounded-full bg-black text-white'>
               Post
             </Text>
