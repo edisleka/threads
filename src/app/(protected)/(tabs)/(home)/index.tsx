@@ -1,6 +1,5 @@
 import { ActivityIndicator, FlatList, Text } from 'react-native'
 import PostListItem from '@/components/PostListItem'
-import { Link } from 'expo-router'
 import { supabase } from '@/lib/supabase'
 import { useQuery } from '@tanstack/react-query'
 
@@ -8,6 +7,7 @@ const fetchPosts = async () => {
   const { data } = await supabase
     .from('posts')
     .select('*, user:profiles(*)')
+    .order('created_at', { ascending: false })
     .throwOnError()
 
   return data
@@ -20,11 +20,11 @@ export default function HomeScreen() {
   })
 
   if (isLoading) {
-    return <ActivityIndicator size='large' color='red' />
+    return <ActivityIndicator />
   }
 
   if (error) {
-    return <Text>Error: {error.message}</Text>
+    return <Text>{error.message}</Text>
   }
 
   return (
