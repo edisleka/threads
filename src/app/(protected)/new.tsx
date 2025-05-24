@@ -8,23 +8,10 @@ import {
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/providers/AuthProvider'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
-
-const createPost = async (content: string, user_id: string) => {
-  const { data } = await supabase
-    .from('posts')
-    .insert({
-      content,
-      user_id,
-    })
-    .select('*')
-    .throwOnError()
-
-  return data
-}
+import { createPost } from '@/services/postsService'
 
 export default function NewPost() {
   const [text, setText] = useState('')
@@ -33,7 +20,7 @@ export default function NewPost() {
   const queryClient = useQueryClient()
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: () => createPost(text, user!.id),
+    mutationFn: () => createPost({ content: text, user_id: user!.id }),
     onSuccess: () => {
       setText('')
       router.replace('/')
