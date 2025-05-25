@@ -8,11 +8,18 @@ import { Link } from 'expo-router'
 // Initialize the relativeTime plugin
 dayjs.extend(relativeTime)
 
-type PostWithUser = Tables<'posts'> & {
+type PostWithUserAndReplies = Tables<'posts'> & {
   user: Tables<'profiles'>
+  replies: {
+    count: number
+  }[]
 }
 
-export default function PostListItem({ post }: { post: PostWithUser }) {
+export default function PostListItem({
+  post,
+}: {
+  post: PostWithUserAndReplies
+}) {
   return (
     <Link href={`/posts/${post.id}`} asChild>
       <Pressable className='flex-row p-4 border-b border-gray-200'>
@@ -45,7 +52,9 @@ export default function PostListItem({ post }: { post: PostWithUser }) {
             </Pressable>
             <Pressable className='flex-row items-center'>
               <Ionicons name='chatbubble-outline' size={20} color='gray' />
-              <Text className='ml-0.5 text-gray-500'>{0}</Text>
+              <Text className='ml-0.5 text-gray-500'>
+                {post?.replies[0]?.count || 0}
+              </Text>
             </Pressable>
 
             <Pressable className='flex-row items-center'>

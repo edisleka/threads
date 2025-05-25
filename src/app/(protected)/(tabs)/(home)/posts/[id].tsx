@@ -32,7 +32,7 @@ export default function PostDetails() {
     return <Text>{error.message}</Text>
   }
 
-  console.log(JSON.stringify(post, null, 2))
+  // console.log(JSON.stringify(post, null, 2))
 
   return (
     <View className='flex-1'>
