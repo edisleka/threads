@@ -17,7 +17,7 @@ export default function PostReplyInput({ postId }: { postId: string }) {
       createPost({ content: text, user_id: user!.id, parent_id: postId }),
     onSuccess: (data) => {
       setText('')
-      // TODO
+      queryClient.invalidateQueries({ queryKey: ['posts', postId, 'replies'] })
     },
     onError: (error) => {
       console.log(error)
