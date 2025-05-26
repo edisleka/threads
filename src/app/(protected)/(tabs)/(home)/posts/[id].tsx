@@ -5,6 +5,7 @@ import PostListItem from '@/components/PostListItem'
 import PostReplyInput from '@/components/PostReplyInput'
 import { FlatList } from 'react-native'
 import { getPostById, getPostsReplies } from '@/services/postsService'
+import PostListDetails from '@/components/PostListDetails'
 
 export default function PostDetails() {
   const { id } = useLocalSearchParams<{ id: string }>()
@@ -39,7 +40,12 @@ export default function PostDetails() {
       <FlatList
         data={replies || []}
         renderItem={({ item }) => <PostListItem post={item} />}
-        ListHeaderComponent={<PostListItem post={post} />}
+        ListHeaderComponent={
+          <>
+            <PostListDetails post={post} />
+            <Text className='text-lg font-bold p-4'>Replies</Text>
+          </>
+        }
       />
       <PostReplyInput postId={id} />
     </View>
