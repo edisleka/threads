@@ -20,6 +20,12 @@ export default function PostDetails() {
     staleTime: 1000 * 60 * 5,
   })
 
+  const { data: parent } = useQuery({
+    queryKey: ['posts', post?.parent_id],
+    queryFn: () => getPostById(post?.parent_id || ''),
+    enabled: !!post?.parent_id,
+  })
+
   const { data: replies } = useQuery({
     queryKey: ['posts', id, 'replies'],
     queryFn: () => getPostsReplies(id),
