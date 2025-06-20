@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { Tables } from '@/types/database.types'
 import { Link } from 'expo-router'
+import { supabase } from '@/lib/supabase'
 
 // Initialize the relativeTime plugin
 dayjs.extend(relativeTime)
@@ -39,6 +40,21 @@ export default function PostListDetails({
             </View>
           </View>
           <Text className='mt-1 text-gray-900'>{post.content}</Text>
+          {post.images && post.images.length > 0 && (
+            <View className='flex-row gap-2 mt-2 '>
+              {post.images.map((image) => (
+                <Image
+                  key={image}
+                  source={{
+                    uri: supabase.storage.from('media').getPublicUrl(image).data
+                      .publicUrl,
+                  }}
+                  className='w-full aspect-square rounded-lg'
+                />
+              ))}
+            </View>
+          )}
+
           <View className='flex-row mt-3 gap-4'>
             <Pressable className='flex-row items-center'>
               <Ionicons name='heart-outline' size={20} color='gray' />
